@@ -24,7 +24,7 @@ jobs:
     - name: Install Dependencies
       run: sudo apt-get -y install gcc make libc6-dev libx11-dev libxmu-dev libxcb-randr0-dev libpng-dev libssl-dev libunistring-dev
     - name: Install sonar-scanner and build-wrapper
-      uses: SonarSource/sonarcloud-github-c-cpp@v1
+      uses: SonarSource/sonarcloud-github-c-cpp@v2
     - name: Run build-wrapper
       run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make
     - name: Run sonar-scanner
