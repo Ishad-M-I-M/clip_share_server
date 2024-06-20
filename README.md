@@ -6,7 +6,7 @@
 
 # ClipShare Server
 
-### Share Clipboard and Files. Copy on one device. Paste on another device
+### Share Clipboard and Files. Copy on one device. Paste on another device.
 
 <br>
 
@@ -37,7 +37,16 @@ or from <a href="https://github.com/thevindu-w/clip_share_client/releases">GitHu
 
 ## Table of Contents
 
-- [Build](#build)
+- [How to Use](#how-to-use)
+  - [Install dependencies](#install-dependencies)
+  - [Run the server](#run-the-server)
+  - [Allow through firewall](#allow-through-firewall)
+  - [Connect the client application](#connect-the-client-application)
+  - [Installation](#Installation) (optional)
+  - [Create SSL/TLS certificate and key files](#create-ssltls-certificate-and-key-files) (optional)
+  - [Command line options](#command-line-options)
+  - [Configuration](#configuration)
+- [Build from Source](#build-from-source)
   - [Build tools](#build-tools)
     - [Linux](#linux)
     - [Windows](#windows)
@@ -47,151 +56,7 @@ or from <a href="https://github.com/thevindu-w/clip_share_client/releases">GitHu
     - [Windows](#windows-1)
     - [macOS](#macos-1)
   - [Compiling](#compiling)
-- [How to Use](#how-to-use)
-  - [Install dependencies](#install-dependencies)
-  - [Run the server](#run-the-server)
-  - [Allow through firewall](#allow-through-firewall)
-  - [Connect the client application](#connect-the-client-application)
-  - [Installation](#Installation)
-  - [Create SSL/TLS certificate and key files](#create-ssltls-certificate-and-key-files)
-  - [Command line options](#command-line-options)
-  - [Configuration](#configuration)
 
-<br>
-
-## Build
-
-**Note:** If you prefer using the pre-built binaries from [Releases](https://github.com/thevindu-w/clip_share_server/releases), you may skip this section and start from the [How to Use](#how-to-use) section.
-
-### Build tools
-
-  This needs the following tools,
-
-* gcc
-* make
-
-#### Linux
-
-  On Linux, these tools can be installed with the following command:
-
-* On Debian-based or Ubuntu-based distros,
-  ```bash
-  sudo apt-get install gcc make
-  ```
-
-* On Redhat-based or Fedora-based distros,
-  ```bash
-  sudo yum install gcc make
-  ```
-
-* On Arch-based distros,
-  ```bash
-  sudo pacman -S gcc make
-  ```
-
-#### Windows
-
-  On Windows, these tools can be installed with [MinGW](https://www.mingw-w64.org/).<br>
-  In an [MSYS2](https://www.msys2.org/) environment, these tools can be installed using pacman with the following command:
-  ```bash
-  pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make
-  ```
-  You may need to rename (or copy) the `<MSYS2 directory>/mingw64/bin/mingw32-make.exe` to `<MSYS2 directory>/mingw64/bin/make.exe` before running the command `make`
-
-#### macOS
-
-  On macOS, these tools are installed with Xcode Command Line Tools.
-
-<br>
-
-### Dependencies
-
-#### Linux
-
-  The following development libraries are required.
-
-* libc
-* libx11
-* libxmu
-* libpng
-* libssl
-* libunistring
-
-  They can be installed with the following command:
-
-* On Debian-based or Ubuntu-based distros,
-  ```bash
-  sudo apt-get install libc6-dev libx11-dev libxmu-dev libpng-dev libssl-dev libunistring-dev
-  ```
-
-* On Redhat-based or Fedora-based distros,
-  ```bash
-  sudo yum install glibc-devel libX11-devel libXmu-devel libpng-devel openssl-devel libunistring-devel
-  ```
-
-* On Arch-based distros,
-  ```bash
-  sudo pacman -S libx11 libxmu libpng openssl libunistring
-  ```
-
-  glibc should already be available on Arch distros. But you may need to upgrade it with the following command. (You need to do this only if the build fails)
-
-  ```bash
-  sudo pacman -S glibc
-  ```
-
-(You may refer to docker/Dockerfile.\* to see how to install the dependencies on various Linux distros)
-
-#### Windows
-
-  The following development libraries are required.
-
-* [libz](https://packages.msys2.org/package/mingw-w64-x86_64-libzip?repo=mingw64)
-* [libpng16](https://packages.msys2.org/package/mingw-w64-x86_64-libpng?repo=mingw64)
-* [libssl](https://packages.msys2.org/package/mingw-w64-x86_64-openssl?repo=mingw64) (provided by OpenSSL)
-* [libunistring](https://packages.msys2.org/package/mingw-w64-x86_64-libunistring?repo=mingw64)
-
-In an [MSYS2](https://www.msys2.org/) environment, these tools can be installed using pacman with the following command:
-```bash
-pacman -S mingw-w64-x86_64-openssl mingw-w64-x86_64-libpng mingw-w64-x86_64-libunistring
-```
-
-#### macOS
-
-  The following development libraries are required.
-
-* [openssl](https://formulae.brew.sh/formula/openssl@3)
-* [libpng](https://formulae.brew.sh/formula/libpng)
-* [libunistring](https://formulae.brew.sh/formula/libunistring)
-
-These tools can be installed using [Homebrew](https://brew.sh) with the following command:
-```bash
-brew install openssl@3 libpng libunistring
-```
-
-<br>
-
-### Compiling
-
-1. Open a terminal / command prompt / Powershell in the project directory
-
-    This can be done using the GUI or the `cd` command.
-
-1. Run the following command to make the executable file
-
-    ```bash
-    make
-    ```
-    This will generate the executable named clip_share (or clip_share.exe on Windows).
-
-    **Note**: The web version is deprecated.<br>
-    To compile with the web server enabled, (Currently, this is tested only on Linux)
-    ```bash
-    make web
-    ```
-    This will generate the web server enabled executable named clip_share_web.
-
-<br>
 <br>
 
 ## How to Use
@@ -231,7 +96,7 @@ brew install libunistring openssl@3 libpng
 * `4337` / `TCP` &nbsp; - &nbsp; For application traffic (not encrypted)
 * `4337` / `UDP` &nbsp; - &nbsp; For network scanning. This is for UDP broadcasts
 * `4338` / `TCP` &nbsp; - &nbsp; For application traffic over TLS (encrypted)
-* `4339` / `TCP` &nbsp; - &nbsp; For the web server (if the web server is available)
+* `4339` / `TCP` &nbsp; - &nbsp; For the web server (only if the web server is available)
 
 You may need to allow incoming connections to the above ports for the client to connect to the server.
 
@@ -263,7 +128,8 @@ To install the server to run on startup, use the corresponding installer script 
 # on Linux
 chmod +x install-linux.sh
 ./install-linux.sh
-
+```
+```bash
 # on macOS
 chmod +x install-mac.sh
 ./install-mac.sh
@@ -291,7 +157,8 @@ You may use the helper script `keygen.sh` in the [helper_tools/](https://github.
 # If you download/clone the repository and run the script from the repository root,
 chmod +x helper_tools/keygen.sh
 helper_tools/keygen.sh
-
+```
+```bash
 # If you download the script separately and run the script from within the same directory,
 chmod +x keygen.sh
 ./keygen.sh
@@ -360,16 +227,12 @@ bind_address=0.0.0.0
 restart=true
 max_text_length=4194304
 max_file_size=68719476736
-
-# Windows and macOS only
 display=1
 client_selects_display=false
+cut_sent_files=false
 
 # Windows only
 tray_icon=true
-
-# Linux and macOS only
-cut_sent_files=false
 ```
 
 Note that all the lines in the configuration file are optional. You may omit some lines if they need to get their default values.
@@ -379,28 +242,164 @@ Note that all the lines in the configuration file are optional. You may omit som
 | Property | Description | Accepted values | Default |
 |  :----:  | :--------   | :------------   |  :---:  |
 | `insecure_mode_enabled` | Whether or not the application listens for unencrypted connections. The values `true` or `1` will enable it, while `false` or `0` will disable it. | `true`, `false`, `1`, `0` (Case insensitive) | `true` |
-| `app_port` | The port on which the application listens for unencrypted TCP connections. (Values below 1024 may require superuser/admin privileges) | Any valid, unused TCP port number (1 - 65535) | `4337` |
 | `secure_mode_enabled` | Whether or not the application listens for TLS-encrypted connections. The values `true` or `1` will enable it, while `false` or `0` will disable it. | `true`, `false`, `1`, `0` (Case insensitive) | `false` |
-| `app_port_secure` | The TCP port on which the application listens for TLS-encrypted connections. (Values below 1024 may require superuser/admin privileges) | Any valid, unused TCP port number (1 - 65535) | `4338` |
-| `udp_port` | The port on which the application listens for UDP broadcasts of network scanning. (Values below 1024 may require superuser/admin privileges) | Any valid, unused UDP port number (1 - 65535) | `4337` |
 | `web_mode_enabled` | Whether or not the application listens for TLS-encrypted connections from web clients if the web mode is available. The values `true` or `1` will enable it, while `false` or `0` will disable it. | `true`, `false`, `1`, `0` (Case insensitive) | `false` |
+| `app_port` | The port on which the application listens for unencrypted TCP connections. (Values below 1024 may require superuser/admin privileges) | Any valid, unused TCP port number (1 - 65535) | `4337` |
+| `udp_port` | The port on which the application listens for UDP broadcasts of network scanning. (Values below 1024 may require superuser/admin privileges) | Any valid, unused UDP port number (1 - 65535) | `4337` |
+| `app_port_secure` | The TCP port on which the application listens for TLS-encrypted connections. (Values below 1024 may require superuser/admin privileges) | Any valid, unused TCP port number (1 - 65535) | `4338` |
 | `web_port` | The TCP port on which the application listens for TLS-encrypted connections for web clients. This setting is used only if web mode is available. (Values below 1024 may require superuser/admin privileges) | Any valid, unused TCP port number (1 - 65535) | `4339` |
 | `server_key` | The TLS private key file of the server. If this is not specified, secure mode (and web mode if available) will be disabled. | Absolute or relative path to the private key file | \<Unspecified\> |
 | `server_cert` | The TLS certificate file of the server. If this is not specified, secure mode (and web mode if available) will be disabled. | Absolute or relative path to the server's TLS certificate file | \<Unspecified\> |
 | `ca_cert` | The TLS certificate file of the CA that signed the TLS certificate of the server. If this is not specified, secure mode (and web mode if available) will be disabled. | Absolute or relative path to the TLS certificate file of the CA | \<Unspecified\> |
 | `allowed_clients` | The text file containing a list of allowed clients (Common Name of client certificate), one name per line. If this is not specified, secure mode (and web mode if available) will be disabled. | Absolute or relative path to the allowed-clients file | \<Unspecified\> |
-| `working_dir` | The working directory where the application should run. All the files, that are sent from a client, will be saved in this directory. It will follow symlinks if this is a path to a symlink. The user running this application should have write access to the directory | Absolute or relative path to an existing directory | `.` (i.e. Current directory) |
 | `bind_address` | The address of the interface to which the application should bind when listening for connections. It will listen on all interfaces if this is set to `0.0.0.0` | IPv4 address of an interface in dot-decimal notation (ex: `192.168.37.5`) or `0.0.0.0` | `0.0.0.0` |
 | `restart` | Whether the application should start or restart by default. The values `true` or `1` will make the server restart by default, while `false` or `0` will make it just start without stopping any running instances of the server. | `true`, `false`, `1`, `0` (Case insensitive) | `true` |
+| `working_dir` | The working directory where the application should run. All the files, that are sent from a client, will be saved in this directory. It will follow symlinks if this is a path to a symlink. The user running this application should have write access to the directory | Absolute or relative path to an existing directory | `.` (i.e. Current directory) |
 | `max_text_length` | The maximum length of text that can be transferred. This is the number of bytes of the text encoded in UTF-8. | Any integer between 1 and 4294967295 (nearly 4 GiB) inclusive. Suffixes K, M, and G (case insensitive) denote x10<sup>3</sup>, x10<sup>6</sup>, and x10<sup>9</sup>, respectively. | 4194304 (i.e. 4 MiB) |
 | `max_file_size` | The maximum size of a single file in bytes that can be transferred. | Any integer between 1 and 9223372036854775807 (nearly 8 EiB) inclusive. Suffixes K, M, G, and T (case insensitive) denote x10<sup>3</sup>, x10<sup>6</sup>, x10<sup>9</sup>, and x10<sup>12</sup>, respectively. | 68719476736 (i.e. 64 GiB) |
+| `display` | The display that should be used for screenshots. | Display number (1 - 65535) | `1` |
+| `cut_sent_files` | Whether to automatically cut the files into the clipboard on the _Send Files_ method. | `true`, `false`, `1`, `0` (Case insensitive) | `false` |
+| `client_selects_display` | Whether the client can override the default/configured display for screenshots in protocol version 3. The values `true` or `1` will allow overriding the default, while `false` or `0` will force using the default/configured display. | `true`, `false`, `1`, `0` (Case insensitive) | `false` |
 | `tray_icon` | Whether the application should display a system tray icon. This option is available only on Windows. The values `true` or `1` will display a tray icon, while `false` or `0` will prevent displaying a tray icon. | `true`, `false`, `1`, `0` (Case insensitive) | `true` |
-| `display` | The display that should be used for screenshots. This option is available only on Windows and macOS. | Display number (1 - 65535) | `1` |
-| `cut_sent_files` | Whether to automatically cut the files into the clipboard on the _Send Files_ method. This option is available only on Linux and macOS. | `true`, `false`, `1`, `0` (Case insensitive) | `false` |
-| `client_selects_display` | Whether the client can override the default/configured display for screenshots in protocol version 3. The values `true` or `1` will allow overriding the default, while `false` or `0` will force using the default/configured display. This option is available only on Windows and macOS. | `true`, `false`, `1`, `0` (Case insensitive) | `false` |
 
 <br>
 
 You may change these values. But it is recommended to keep the port numbers unchanged. If the port numbers are changed, client application configurations may also need to be changed as appropriate to connect to the server.
 <br>
 If you changed the configuration file, you must restart the server to apply the changes.
+
+<br>
+<br>
+
+## Build from Source
+
+**Note:** If you prefer using the pre-built binaries from [Releases](https://github.com/thevindu-w/clip_share_server/releases), you can ignore this section and follow the instructions in the [How to Use](#how-to-use) section.
+
+### Build tools
+
+  Compiling ClipShare needs the following tools,
+
+* gcc
+* make
+
+#### Linux
+
+  On Linux, these tools can be installed with the following command:
+
+* On Debian-based or Ubuntu-based distros,
+  ```bash
+  sudo apt-get install gcc make
+  ```
+
+* On Redhat-based or Fedora-based distros,
+  ```bash
+  sudo yum install gcc make
+  ```
+
+* On Arch-based distros,
+  ```bash
+  sudo pacman -S gcc make
+  ```
+
+#### Windows
+
+  On Windows, these tools can be installed with [MinGW](https://www.mingw-w64.org/).<br>
+  In an [MSYS2](https://www.msys2.org/) environment, these tools can be installed using pacman with the following command:
+  ```bash
+  pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make
+  ```
+  You may need to rename (or copy) the `<MSYS2 directory>/mingw64/bin/mingw32-make.exe` to `<MSYS2 directory>/mingw64/bin/make.exe` before running the command `make`
+
+#### macOS
+
+  On macOS, these tools are installed with Xcode Command Line Tools.
+
+<br>
+
+### Dependencies
+
+#### Linux
+
+  The following development libraries are required.
+
+* libc
+* libx11
+* libxmu
+* libxcb-randr
+* libpng
+* libssl
+* libunistring
+
+  They can be installed with the following command:
+
+* On Debian-based or Ubuntu-based distros,
+  ```bash
+  sudo apt-get install libc6-dev libx11-dev libxmu-dev libxcb-randr0-dev libpng-dev libssl-dev libunistring-dev
+  ```
+
+* On Redhat-based or Fedora-based distros,
+  ```bash
+  sudo yum install glibc-devel libX11-devel libXmu-devel libpng-devel openssl-devel libunistring-devel
+  ```
+
+* On Arch-based distros,
+  ```bash
+  sudo pacman -S libx11 libxmu libpng openssl libunistring
+  ```
+
+  glibc should already be available on Arch distros. But you may need to upgrade it with the following command. (You need to do this only if the build fails)
+
+  ```bash
+  sudo pacman -S glibc
+  ```
+
+(You may refer to docker/Dockerfile.\* to see how to install the dependencies on various Linux distros)
+
+#### Windows
+
+  The following development libraries are required.
+
+* [libz](https://packages.msys2.org/package/mingw-w64-x86_64-libzip?repo=mingw64)
+* [libpng16](https://packages.msys2.org/package/mingw-w64-x86_64-libpng?repo=mingw64)
+* [libssl](https://packages.msys2.org/package/mingw-w64-x86_64-openssl?repo=mingw64) (provided by OpenSSL)
+* [libunistring](https://packages.msys2.org/package/mingw-w64-x86_64-libunistring?repo=mingw64)
+
+In an [MSYS2](https://www.msys2.org/) environment, these tools can be installed using pacman with the following command:
+```bash
+pacman -S mingw-w64-x86_64-openssl mingw-w64-x86_64-libpng mingw-w64-x86_64-libunistring
+```
+
+#### macOS
+
+  The following development libraries are required.
+
+* [openssl](https://formulae.brew.sh/formula/openssl@3)
+* [libpng](https://formulae.brew.sh/formula/libpng)
+* [libunistring](https://formulae.brew.sh/formula/libunistring)
+
+These tools can be installed using [Homebrew](https://brew.sh) with the following command:
+```bash
+brew install openssl@3 libpng libunistring
+```
+
+<br>
+
+### Compiling
+
+1. Open a terminal / command prompt / Powershell in the project directory
+
+    This can be done using the GUI or the `cd` command.
+
+1. Run the following command to make the executable file
+
+    ```bash
+    make
+    ```
+    This will generate the executable named clip_share (or clip_share.exe on Windows).
+
+    **Note**: The web version is deprecated.<br>
+    To compile with the web server enabled, (Currently, this is tested only on Linux)
+    ```bash
+    make web
+    ```
+    This will generate the web server enabled executable named clip_share_web.
